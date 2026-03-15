@@ -17,10 +17,13 @@ public class Contact {
 
     public static final String MESSAGE_CONSTRAINTS = "Error: Invalid contact information.";
 
-    /** Regex for validating local phone numbers (exactly 8 digits) */
+    /**
+     * Regex for validating local phone numbers (exactly 8 digits)
+     */
     private static final String LOCAL_PHONE_REGEX = "\\d{8}";
 
-    /** Regex for validating international phone numbers
+    /**
+     * Regex for validating international phone numbers
      *
      * '+' then 2–3 digit country code
      * 1–12 digit subscriber number

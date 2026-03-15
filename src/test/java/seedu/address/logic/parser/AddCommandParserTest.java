@@ -22,7 +22,6 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_CONTACT_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_DEADLINE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_LOCATION_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_PRODUCTS_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PRODUCTS_BOB;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_CONTACT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DEADLINE;
