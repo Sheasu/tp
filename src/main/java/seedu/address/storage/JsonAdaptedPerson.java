@@ -43,7 +43,9 @@ class JsonAdaptedPerson {
      */
     public JsonAdaptedPerson(Person source) {
         name = source.getName().getFullName();
-        products = source.getProducts().toString(); // products are required
+        products = source.getProducts().getItems().isEmpty()
+                ? null
+                : source.getProducts().toString(); // store null when products are missing
         location = source.getLocation().getValue().isBlank()
                 ? null
                 : source.getLocation().getValue(); // store null when location is missing
@@ -69,14 +71,13 @@ class JsonAdaptedPerson {
         }
         final Name modelName = new Name(name);
 
-        if (products == null) {
-            throw new IllegalValueException(
-                    String.format(MISSING_FIELD_MESSAGE_FORMAT, Products.class.getSimpleName()));
+        Products modelProducts = Products.empty(); // defaults when products are missing
+        if (products != null && !products.isBlank()) {
+            if (!Products.isValidProducts(products)) {
+                throw new IllegalValueException(Products.MESSAGE_CONSTRAINTS);
+            }
+            modelProducts = new Products(products);
         }
-        if (!Products.isValidProducts(products)) {
-            throw new IllegalValueException(Products.MESSAGE_CONSTRAINTS);
-        }
-        Products modelProducts = new Products(products); // products are required
 
         Location modelLocation = Location.empty(); // defaults when location is missing
         if (location != null) {

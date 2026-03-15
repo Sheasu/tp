@@ -83,11 +83,21 @@ public class JsonAdaptedPersonTest {
     }
 
     @Test
-    public void toModelType_missingProducts_throwsIllegalValueException() {
+    public void toModelType_missingProducts_returnsPersonWithEmptyProducts() throws Exception {
         JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, null, VALID_LOCATION, VALID_DEADLINE,
                 VALID_CONTACT);
-        String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, Products.class.getSimpleName());
-        assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
+        Person expectedPerson = new Person(new Name(VALID_NAME), Products.empty(), new Location(VALID_LOCATION),
+                new Deadline(VALID_DEADLINE), new Contact(VALID_CONTACT));
+        assertEquals(expectedPerson, person.toModelType());
+    }
+
+    @Test
+    public void toModelType_blankProducts_returnsPersonWithEmptyProducts() throws Exception {
+        JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, "", VALID_LOCATION, VALID_DEADLINE,
+                VALID_CONTACT);
+        Person expectedPerson = new Person(new Name(VALID_NAME), Products.empty(), new Location(VALID_LOCATION),
+                new Deadline(VALID_DEADLINE), new Contact(VALID_CONTACT));
+        assertEquals(expectedPerson, person.toModelType());
     }
 
     @Test
