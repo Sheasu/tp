@@ -28,6 +28,8 @@ public class ContactTest {
         assertFalse(Contact.isValidContact("")); // empty string
         assertFalse(Contact.isValidContact(" ")); // spaces only
         assertFalse(Contact.isValidContact("bob!yahoo")); // invalid email
+        String longEmail = "a".repeat(89) + "@example.com";
+        assertFalse(Contact.isValidContact(longEmail)); // email too long
         assertFalse(Contact.isValidContact("123")); // too short phone
         assertFalse(Contact.isValidContact("91234567;")); // empty entry
 

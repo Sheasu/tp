@@ -41,6 +41,7 @@ public class Contact {
      */
     private static final String EMAIL_REGEX =
             "[A-Za-z0-9][A-Za-z0-9.-]*@[A-Za-z0-9][A-Za-z0-9.-]*";
+    private static final int MAX_EMAIL_LENGTH = 100;
 
     private static final Contact EMPTY = new Contact(Collections.emptyList());
 
@@ -144,6 +145,6 @@ public class Contact {
     }
 
     private static boolean isValidEmail(String candidate) {
-        return candidate.matches(EMAIL_REGEX);
+        return candidate.length() <= MAX_EMAIL_LENGTH && candidate.matches(EMAIL_REGEX);
     }
 }
