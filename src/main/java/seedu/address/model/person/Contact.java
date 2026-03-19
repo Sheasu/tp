@@ -41,7 +41,7 @@ public class Contact {
      */
     private static final String EMAIL_REGEX =
             "[A-Za-z0-9][A-Za-z0-9.-]*@[A-Za-z0-9][A-Za-z0-9.-]*";
-    private static final int MAX_EMAIL_LENGTH = 100;
+    public static final int MAX_EMAIL_LENGTH = 100;
 
     private static final Contact EMPTY = new Contact(Collections.emptyList());
 
