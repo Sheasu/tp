@@ -13,6 +13,9 @@ import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Contact;
+import seedu.address.model.person.Deadline;
+import seedu.address.model.person.Location;
+import seedu.address.model.person.Products;
 
 /**
  * Parses input arguments and creates a new EditCommand object
@@ -45,13 +48,22 @@ public class EditCommandParser implements Parser<EditCommand> {
             editPersonDescriptor.setName(ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get()));
         }
         if (argMultimap.getValue(PREFIX_PRODUCTS).isPresent()) {
-            editPersonDescriptor.setProducts(ParserUtil.parseProducts(argMultimap.getValue(PREFIX_PRODUCTS).get()));
+            String rawProducts = argMultimap.getValue(PREFIX_PRODUCTS).get();
+            editPersonDescriptor.setProducts(rawProducts.trim().isEmpty()
+                    ? Products.empty()
+                    : ParserUtil.parseProducts(rawProducts));
         }
         if (argMultimap.getValue(PREFIX_LOCATION).isPresent()) {
-            editPersonDescriptor.setLocation(ParserUtil.parseLocation(argMultimap.getValue(PREFIX_LOCATION).get()));
+            String rawLocation = argMultimap.getValue(PREFIX_LOCATION).get();
+            editPersonDescriptor.setLocation(rawLocation.trim().isEmpty()
+                    ? Location.empty()
+                    : ParserUtil.parseLocation(rawLocation));
         }
         if (argMultimap.getValue(PREFIX_DEADLINE).isPresent()) {
-            editPersonDescriptor.setDeadline(ParserUtil.parseDeadline(argMultimap.getValue(PREFIX_DEADLINE).get()));
+            String rawDeadline = argMultimap.getValue(PREFIX_DEADLINE).get();
+            editPersonDescriptor.setDeadline(rawDeadline.trim().isEmpty()
+                    ? Deadline.empty()
+                    : ParserUtil.parseDeadline(rawDeadline));
         }
         if (argMultimap.getValue(PREFIX_CONTACT).isPresent()) {
             String rawContact = argMultimap.getValue(PREFIX_CONTACT).get();

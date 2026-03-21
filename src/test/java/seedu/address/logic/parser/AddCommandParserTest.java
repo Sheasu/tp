@@ -107,6 +107,15 @@ public class AddCommandParserTest {
     }
 
     @Test
+    public void parse_emptyOptionalFields_success() {
+        Person expectedPerson = new Person(new Name(AMY.getName().getFullName()), Products.empty(),
+                Location.empty(), Deadline.empty(), Contact.empty());
+
+        assertParseSuccess(parser, NAME_DESC_AMY + " " + PREFIX_PRODUCTS + " " + PREFIX_LOCATION
+                + " " + PREFIX_DEADLINE + " " + PREFIX_CONTACT, new AddCommand(expectedPerson));
+    }
+
+    @Test
     public void parse_compulsoryFieldMissing_failure() {
         // missing name prefix
         assertParseFailure(parser, VALID_NAME_BOB + PRODUCTS_DESC_BOB + LOCATION_DESC_BOB + DEADLINE_DESC_BOB
@@ -127,9 +136,7 @@ public class AddCommandParserTest {
         assertParseFailure(parser, NAME_DESC_BOB + INVALID_PRODUCTS_DESC + LOCATION_DESC_BOB + DEADLINE_DESC_BOB
                 + CONTACT_DESC_BOB, Products.MESSAGE_CONSTRAINTS);
 
-        // invalid location
-        assertParseFailure(parser, NAME_DESC_BOB + PRODUCTS_DESC_BOB + INVALID_LOCATION_DESC + DEADLINE_DESC_BOB
-                + CONTACT_DESC_BOB, Location.MESSAGE_CONSTRAINTS);
+        // invalid location (blank values are allowed)
 
         // invalid deadline
         assertParseFailure(parser, NAME_DESC_BOB + PRODUCTS_DESC_BOB + LOCATION_DESC_BOB + INVALID_DEADLINE_DESC

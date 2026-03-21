@@ -57,17 +57,26 @@ public class AddCommandParser implements Parser<AddCommand> {
         Name name = ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get());
         Products products = Products.empty(); // defaults when products are missing
         if (argMultimap.getValue(PREFIX_PRODUCTS).isPresent()) {
-            products = ParserUtil.parseProducts(argMultimap.getValue(PREFIX_PRODUCTS).get()); // parse products input
+            String rawProducts = argMultimap.getValue(PREFIX_PRODUCTS).get();
+            products = rawProducts.trim().isEmpty()
+                    ? Products.empty()
+                    : ParserUtil.parseProducts(rawProducts); // parse products input
         }
 
         Location location = Location.empty(); // defaults when location is missing
         if (argMultimap.getValue(PREFIX_LOCATION).isPresent()) {
-            location = ParserUtil.parseLocation(argMultimap.getValue(PREFIX_LOCATION).get()); // parse location input
+            String rawLocation = argMultimap.getValue(PREFIX_LOCATION).get();
+            location = rawLocation.trim().isEmpty()
+                    ? Location.empty()
+                    : ParserUtil.parseLocation(rawLocation); // parse location input
         }
 
         Deadline deadline = Deadline.empty(); // defaults to no deadline when missing
         if (argMultimap.getValue(PREFIX_DEADLINE).isPresent()) {
-            deadline = ParserUtil.parseDeadline(argMultimap.getValue(PREFIX_DEADLINE).get()); // parse deadline input
+            String rawDeadline = argMultimap.getValue(PREFIX_DEADLINE).get();
+            deadline = rawDeadline.trim().isEmpty()
+                    ? Deadline.empty()
+                    : ParserUtil.parseDeadline(rawDeadline); // parse deadline input
         }
 
         Contact contact = Contact.empty(); // defaults when contact is missing
