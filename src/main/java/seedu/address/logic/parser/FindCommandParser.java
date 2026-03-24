@@ -1,11 +1,12 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_CONTACT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_CONTACT_SHORT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME_SHORT;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -13,7 +14,6 @@ import seedu.address.model.person.Contact;
 import seedu.address.model.person.ContactContainsKeywordsPredicate;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
-import seedu.address.model.person.Person;
 
 /**
  * Parses input arguments and creates a new FindCommand object
@@ -29,27 +29,50 @@ public class FindCommandParser implements Parser<FindCommand> {
     public FindCommand parse(String args) throws ParseException {
         String trimmedArgs = args.trim();
         if (trimmedArgs.isEmpty()) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    FindCommand.MESSAGE_USAGE));
         }
 
-        String[] keywords = trimmedArgs.split("\\s+");
-        int lengthLimit = Math.max(Name.MAX_LENGTH, Contact.MAX_EMAIL_LENGTH);
+        var argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_CONTACT,
+                PREFIX_CONTACT_SHORT, PREFIX_NAME, PREFIX_NAME_SHORT);
 
-        if (Arrays.stream(keywords).anyMatch(keyword -> keyword.length() > lengthLimit)) {
+        if (!argMultimap.getPreamble().isEmpty()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    FindCommand.MESSAGE_USAGE));
+        }
+
+        var nameKeywords = Stream.concat(
+                argMultimap.getAllValues(PREFIX_NAME).stream(),
+                argMultimap.getAllValues(PREFIX_NAME_SHORT).stream())
+                        .map(kw -> kw.trim()).filter(kw -> !kw.isEmpty()).toList();
+
+        if (nameKeywords.stream().anyMatch(kw -> kw.length() > Name.MAX_LENGTH)) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                            String.format("Keyword length must not exceed %d characters.", lengthLimit))
+                            String.format("Name keyword length must not exceed %d characters.",
+                            Name.MAX_LENGTH))
             );
         }
 
-        List<Predicate<Person>> predicates = new ArrayList<Predicate<Person>>();
-        predicates.add(new NameContainsKeywordsPredicate(Arrays.asList(keywords)));
-        predicates.add(new ContactContainsKeywordsPredicate(Arrays.asList(keywords)));
+        var contactKeywords = Stream.concat(
+                argMultimap.getAllValues(PREFIX_CONTACT).stream(),
+                argMultimap.getAllValues(PREFIX_CONTACT_SHORT).stream())
+                        .map(kw -> kw.trim()).filter(kw -> !kw.isEmpty()).toList();
 
-        Predicate<Person> anyPredicate = predicates.stream().reduce(Predicate::or).orElse(person -> false);
+        if (contactKeywords.stream().anyMatch(kw -> kw.length() > Contact.MAX_EMAIL_LENGTH)) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                            String.format("Name keyword length must not exceed %d characters.",
+                            Contact.MAX_EMAIL_LENGTH))
+            );
+        }
 
-        return new FindCommand(anyPredicate);
+        var namePred = new NameContainsKeywordsPredicate(nameKeywords);
+        var contactPred = new ContactContainsKeywordsPredicate(contactKeywords);
+
+        var pred = namePred.or(contactPred);
+
+        return new FindCommand(pred);
     }
 
 }
