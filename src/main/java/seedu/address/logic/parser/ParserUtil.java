@@ -4,11 +4,14 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.logic.parser.CliSyntax;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Contact;
 import seedu.address.model.person.Deadline;
@@ -24,6 +27,13 @@ import seedu.address.model.tag.Tag;
 public class ParserUtil {
 
     public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
+    private static final Map<String, String> SHORT_PREFIX_MAPPING = Map.of(
+            "n/", CliSyntax.PREFIX_NAME.getPrefix(),
+            "p/", CliSyntax.PREFIX_PRODUCTS.getPrefix(),
+            "l/", CliSyntax.PREFIX_LOCATION.getPrefix(),
+            "d/", CliSyntax.PREFIX_DEADLINE.getPrefix(),
+            "c/", CliSyntax.PREFIX_CONTACT.getPrefix()
+    );
 
     /**
      * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
@@ -200,5 +210,17 @@ public class ParserUtil {
             tagSet.add(parseTag(tagName));
         }
         return tagSet;
+    }
+
+    /**
+     * Normalizes short-form prefixes (e.g. n/, p/) to their long-form equivalents.
+     */
+    public static String normalizeShortPrefixes(String argsString) {
+        requireNonNull(argsString);
+        String normalized = argsString;
+        for (Map.Entry<String, String> entry : SHORT_PREFIX_MAPPING.entrySet()) {
+            normalized = normalized.replaceAll("(?<=^|\\s)" + Pattern.quote(entry.getKey()), entry.getValue());
+        }
+        return normalized;
     }
 }

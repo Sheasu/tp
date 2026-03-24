@@ -57,6 +57,16 @@ public class AddCommandParserTest {
     }
 
     @Test
+    public void parse_shortPrefixes_success() {
+        String userInput = " n/" + VALID_NAME_BOB + " p/" + VALID_PRODUCTS_BOB + " l/" + VALID_LOCATION_BOB
+                + " d/" + VALID_DEADLINE_BOB + " c/" + VALID_CONTACT_BOB;
+        Person expectedPerson = new Person(new Name(VALID_NAME_BOB), new Products(VALID_PRODUCTS_BOB),
+                new Location(VALID_LOCATION_BOB), new Deadline(VALID_DEADLINE_BOB), new Contact(VALID_CONTACT_BOB));
+
+        assertParseSuccess(parser, userInput, new AddCommand(expectedPerson));
+    }
+
+    @Test
     public void parse_repeatedValue_failure() {
         String validExpectedPersonString = NAME_DESC_BOB + PRODUCTS_DESC_BOB + LOCATION_DESC_BOB
                 + DEADLINE_DESC_BOB + CONTACT_DESC_BOB;

@@ -119,6 +119,18 @@ public class EditCommandParserTest {
     }
 
     @Test
+    public void parse_shortPrefixes_success() {
+        Index targetIndex = INDEX_FIRST_PERSON;
+        String userInput = targetIndex.getOneBased() + " n/" + VALID_NAME_AMY + " p/" + VALID_PRODUCTS_AMY;
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withName(VALID_NAME_AMY)
+                .withProducts(VALID_PRODUCTS_AMY).build();
+        EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
+
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
     public void parse_oneFieldSpecified_success() {
         Index targetIndex = INDEX_THIRD_PERSON;
 

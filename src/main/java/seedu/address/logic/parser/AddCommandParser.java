@@ -39,8 +39,10 @@ public class AddCommandParser implements Parser<AddCommand> {
      * @throws ParseException if the user input does not conform the expected format.
      */
     public AddCommand parse(String args) throws ParseException {
-        verifyNoUnknownPrefixes(args);
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PRODUCTS, PREFIX_LOCATION,
+        String normalizedArgs = ParserUtil.normalizeShortPrefixes(args);
+        verifyNoUnknownPrefixes(normalizedArgs);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(normalizedArgs, PREFIX_NAME, PREFIX_PRODUCTS,
+                PREFIX_LOCATION,
                 PREFIX_DEADLINE, PREFIX_CONTACT);
 
         if (argMultimap.getValue(PREFIX_NAME).isEmpty()

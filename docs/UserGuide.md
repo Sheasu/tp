@@ -80,6 +80,7 @@ Adds a person to ClientEase.
 Format: `add name/NAME [products/PRODUCTS] [location/LOCATION] [deadline/DATE] [contact/CONTACT]`
 
 Products are optional. If omitted, the customer will have no products recorded.
+Customers are considered duplicates if they share the same name.
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 Products are limited to these placeholder items: Muffin, Chocolate Cake, Vanilla Cake, Brownie, Cookie.
