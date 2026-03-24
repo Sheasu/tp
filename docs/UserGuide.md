@@ -77,7 +77,10 @@ Format: `help`
 
 Adds a person to ClientEase.
 
-Format: `add name/NAME [products/PRODUCTS] [location/LOCATION] [deadline/DATE] [contact/CONTACT]`
+Format: `add name/NAME [products/PRODUCTS] [location/LOCATION] [deadline/DATE] [contact/CONTACT]`.
+
+Short prefixes are also supported: `n/` for `name/`, `p/` for `products/`,
+`l/` for `location/`, `d/` for `deadline/`, and `c/` for `contact/`.
 
 Products are optional. If omitted, the customer will have no products recorded.
 Customers are considered duplicates if they share the same name.
@@ -102,6 +105,8 @@ Format: `list`
 Edits an existing person in ClientEase.
 
 Format: `edit INDEX [name/NAME] [products/PRODUCTS] [location/LOCATION] [deadline/DATE] [contact/CONTACT]`
+Short prefixes are supported: `n/` for `name/`, `p/` for `products/`,
+`l/` for `location/`, `d/` for `deadline/`, and `c/` for `contact/`.
 
 * Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
