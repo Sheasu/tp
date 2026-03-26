@@ -13,7 +13,7 @@ public class Location {
 
     public static final String MESSAGE_CONSTRAINTS = "Error: Invalid location.";
 
-    private static final int MAX_LENGTH = 200;
+    public static final int MAX_LENGTH = 200;
     private static final Location EMPTY = new Location("", true);
 
     private final String value;

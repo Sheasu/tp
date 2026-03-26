@@ -10,6 +10,7 @@ public class CliSyntax {
     public static final Prefix PREFIX_NAME_SHORT = new Prefix("n/");
     public static final Prefix PREFIX_PRODUCTS = new Prefix("products/");
     public static final Prefix PREFIX_LOCATION = new Prefix("location/");
+    public static final Prefix PREFIX_LOCATION_SHORT = new Prefix("l/");
     public static final Prefix PREFIX_DEADLINE = new Prefix("deadline/");
     public static final Prefix PREFIX_CONTACT = new Prefix("contact/");
     public static final Prefix PREFIX_CONTACT_SHORT = new Prefix("c/");
