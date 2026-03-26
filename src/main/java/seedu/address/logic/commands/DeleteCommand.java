@@ -3,9 +3,11 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.Objects;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
@@ -28,6 +30,8 @@ public class DeleteCommand extends Command {
             + "Example: " + COMMAND_WORD + " 1, " + COMMAND_ALIAS + " 1, " + COMMAND_WORD + " John Doe";
 
     public static final String MESSAGE_DELETE_PERSON_SUCCESS = "SUCCESS: Deleted Person: %1$s";
+
+    private static final Logger logger = LogsCenter.getLogger(DeleteCommand.class);
 
     private final Index targetIndex;
     private final Name targetName;
@@ -53,20 +57,33 @@ public class DeleteCommand extends Command {
         requireNonNull(model);
         List<Person> lastShownList = model.getFilteredPersonList();
 
+        assert lastShownList != null : "Filtered person list should not be null";
+
         if (lastShownList.isEmpty()) {
             throw new CommandException(Messages.MESSAGE_EMPTY_CUSTOMER_LIST);
         }
 
         if (targetIndex != null) {
+            assert targetName == null : "Only one of targetIndex or targetName should be set";
+
             if (targetIndex.getZeroBased() >= lastShownList.size()) {
                 throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
             }
 
+            logger.info("Deleting person by index: " + targetIndex);
+
             Person personToDelete = lastShownList.get(targetIndex.getZeroBased());
             model.deletePerson(personToDelete);
+
+            logger.info("Deleted person: " + personToDelete);
+
             return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS,
                     Messages.format(personToDelete)));
         }
+
+        assert targetName != null : "Target name should not be null when deleting by name";
+
+        logger.info("Attempting to delete person by name: " + targetName);
 
         List<Person> matches = lastShownList.stream()
                 .filter(p -> p.getName().equals(targetName))
@@ -82,6 +99,8 @@ public class DeleteCommand extends Command {
 
         Person personToDelete = matches.get(0);
         model.deletePerson(personToDelete);
+
+        logger.info("Deleted person: " + personToDelete);
 
         return new CommandResult(String.format(MESSAGE_DELETE_PERSON_SUCCESS,
                 Messages.format(personToDelete)));
