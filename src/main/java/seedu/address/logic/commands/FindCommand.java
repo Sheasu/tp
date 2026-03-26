@@ -24,7 +24,12 @@ public class FindCommand extends Command {
 
     private final Predicate<Person> predicate;
 
+    /**
+     * Constructs a {@code FindCommand} from a {@code predicate}.
+     * @param predicate the predicate to filter the person list, cannot be null
+     */
     public FindCommand(Predicate<Person> predicate) {
+        assert predicate != null : "The predicate should not be null";
         this.predicate = predicate;
     }
 
