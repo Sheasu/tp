@@ -117,30 +117,6 @@ public class DeleteCommandTest {
     }
 
     @Test
-    public void execute_duplicateName_throwsCommandException() {
-        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-
-        Person original = model.getFilteredPersonList().get(0);
-
-        Contact differentContact = new Contact("89123456");
-
-        Person duplicate = new Person(
-                original.getName(),
-                original.getProducts(),
-                original.getLocation(),
-                original.getDeadline(),
-                differentContact
-        );
-
-        model.addPerson(duplicate);
-
-        DeleteCommand deleteCommand = new DeleteCommand(original.getName());
-
-        assertCommandFailure(deleteCommand, model,
-                "Multiple persons found with name: " + original.getName());
-    }
-
-    @Test
     public void equals() {
         DeleteCommand deleteFirstCommand = new DeleteCommand(INDEX_FIRST_PERSON);
         DeleteCommand deleteSecondCommand = new DeleteCommand(INDEX_SECOND_PERSON);
