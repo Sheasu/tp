@@ -16,9 +16,8 @@ Class UniquePersonList
 Class Person
 Class Products
 Class Address
-Class Email
+Class Contact
 Class Name
-Class Phone
 Class Tag
 
 Class I #FFFFFF
@@ -40,17 +39,15 @@ AddressBook *--> "1" UniquePersonList
 UniquePersonList --> "~* all" Person
 Person *--> Name
 Person *--> Products
-Person *--> Phone
-Person *--> Email
+Person *--> Contact
 Person *--> Address
 Person *--> "*" Tag
 
 Person -[hidden]up--> I
 UniquePersonList -[hidden]right-> I
 
-Name -[hidden]right-> Phone
-Phone -[hidden]right-> Address
-Address -[hidden]right-> Email
+Name -[hidden]right-> Contact
+Contact -[hidden]right-> Address
 Products -[hidden]right-> Address
 
 ModelManager --> "~* filtered" Person
