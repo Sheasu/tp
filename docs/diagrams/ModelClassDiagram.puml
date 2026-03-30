@@ -14,6 +14,7 @@ Class UserPrefs
 
 Class UniquePersonList
 Class Person
+Class Products
 Class Address
 Class Email
 Class Name
@@ -38,6 +39,7 @@ UserPrefs .up.|> ReadOnlyUserPrefs
 AddressBook *--> "1" UniquePersonList
 UniquePersonList --> "~* all" Person
 Person *--> Name
+Person *--> Products
 Person *--> Phone
 Person *--> Email
 Person *--> Address
@@ -49,6 +51,7 @@ UniquePersonList -[hidden]right-> I
 Name -[hidden]right-> Phone
 Phone -[hidden]right-> Address
 Address -[hidden]right-> Email
+Products -[hidden]right-> Address
 
 ModelManager --> "~* filtered" Person
 @enduml
