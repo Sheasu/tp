@@ -220,9 +220,11 @@ add name/NAME [products/PRODUCTS] [location/LOCATION] [deadline/DEADLINE] [conta
 | `deadline/DEADLINE` | No | Accepted formats: `yyyy-MM-dd HH:mm`, `yyyy-MM-dd`, `dd/MM/yyyy`. Entries without a time default to **23:59**.                                                                                                                                                                                                                                                                                                                                                                   |
 | `contact/CONTACT` | No | One or more phone numbers and/or emails, separated by semicolons. Phone: either an 8-digit local number or `+<country code><number>` (2–3 digit country code + 1–12 digit number). Spaces in phone numbers are ignored. Email: up to 100 characters, letters/digits/dots/hyphens, with exactly one `@` and an alphanumeric at the start of the domain. Empty entries (e.g. trailing or double `;`) are invalid. |
 
-> **Important:** ClientEase automatically tags customers with a priority colour based on the **total quantity** of
-> products. Green (Low) = 1–5 items, Yellow (Medium) = 6–10 items, Red (High) = 11+ items. If you omit a quantity, it
-> counts as 1 toward the total.
+> **Important:** ClientEase automatically tags customers with a priority colour based on the **total quantity** of products.
+> * **Green (Low):** 1–5 total items
+> * **Yellow (Medium):** 6–10 total items
+> * **Red (High):** 11 or more total items
+> * No priority tag is shown if the customer has no products.
 
 **Other constraints:**
 
