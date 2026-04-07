@@ -331,7 +331,7 @@ find [name/NAME] [contact/CONTACT] [location/LOCATION] [products/PRODUCTS]
 
 - `find name/John` returns `john` and `John Doe`
 - `find name/alex name/david` returns `Alex Yeoh`, `David Li`
-- `find name/alex name/david p/cake` returns `Alex Yeoh`, where `Alex Yeoh` has `Muffin` and `David Li` has `Chocolate Cake`
+- `find name/alex name/david p/cake` returns `David Li`, where `Alex Yeoh` has `Muffin` and `David Li` has `Chocolate Cake`
 
 ![result for 'find alex david'](images/findAlexDavidResult.png)
 
