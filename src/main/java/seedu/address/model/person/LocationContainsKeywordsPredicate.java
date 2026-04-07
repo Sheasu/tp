@@ -18,7 +18,9 @@ public class LocationContainsKeywordsPredicate implements Predicate<Person> {
     @Override
     public boolean test(Person person) {
         return keywords.stream()
-                .anyMatch(keyword -> person.getLocation().getValue().contains(keyword));
+                .anyMatch(keyword ->
+                        person.getLocation().getValue().toLowerCase()
+                                .contains(keyword.toLowerCase()));
     }
 
     @Override

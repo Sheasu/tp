@@ -16,6 +16,7 @@ import seedu.address.model.person.Deadline;
 import seedu.address.model.person.Location;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Products;
+import seedu.address.model.product.Product;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -165,6 +166,21 @@ public class ParserUtil {
             throw new ParseException(Tag.MESSAGE_CONSTRAINTS);
         }
         return new Tag(trimmedTag);
+    }
+
+    /**
+     * Returns a {@code Product} parsed from the given {@code String}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code product} is invalid.
+     */
+    public static Product parseProduct(String product) throws ParseException {
+        requireNonNull(product);
+        String trimmedProduct = product.trim();
+        if (!Product.isValidProductName(trimmedProduct)) {
+            throw new ParseException(Product.MESSAGE_CONSTRAINTS);
+        }
+        return new Product(trimmedProduct);
     }
 
     /**

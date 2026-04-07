@@ -8,6 +8,7 @@ import seedu.address.model.person.Location;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Products;
+import seedu.address.model.product.Product;
 
 /**
  * Contains utility methods for populating {@code AddressBook} with sample data.
@@ -41,7 +42,20 @@ public class SampleDataUtil {
         for (Person samplePerson : getSamplePersons()) {
             sampleAb.addPerson(samplePerson);
         }
+        for (Product product : getSampleProducts()) {
+            sampleAb.addProduct(product);
+        }
         return sampleAb;
+    }
+
+    public static Product[] getSampleProducts() {
+        return new Product[] {
+            new Product("Brownie"),
+            new Product("Chocolate Cake"),
+            new Product("Cookie"),
+            new Product("Muffin"),
+            new Product("Vanilla Cake")
+        };
     }
 
 }

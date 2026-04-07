@@ -16,6 +16,7 @@ import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.Logic;
 import seedu.address.logic.commands.CommandResult;
+import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -154,14 +155,26 @@ public class MainWindow extends UiPart<Stage> {
     }
 
     /**
-     * Closes the application.
+     * Triggers the exit command when the "Exit" menu item is clicked.
      */
     @FXML
     private void handleExit() {
+        try {
+            executeCommand(ExitCommand.COMMAND_WORD);
+        } catch (CommandException | ParseException e) {
+            logger.severe("Failed to execute exit command: " + e.getMessage());
+        }
+    }
+
+    /**
+     * The actual logic to shut down the window.
+     */
+    private void closeApp() {
         GuiSettings guiSettings = new GuiSettings(primaryStage.getWidth(), primaryStage.getHeight(),
                 (int) primaryStage.getX(), (int) primaryStage.getY());
         logic.setGuiSettings(guiSettings);
         helpWindow.hide();
+
         PauseTransition delay = new PauseTransition(Duration.seconds(2.0));
         delay.setOnFinished(event -> primaryStage.hide());
         delay.play();
@@ -187,7 +200,7 @@ public class MainWindow extends UiPart<Stage> {
             }
 
             if (commandResult.isExit()) {
-                handleExit();
+                closeApp();
             }
 
             return commandResult;

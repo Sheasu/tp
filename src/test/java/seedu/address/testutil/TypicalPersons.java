@@ -17,6 +17,7 @@ import java.util.List;
 
 import seedu.address.model.AddressBook;
 import seedu.address.model.person.Person;
+import seedu.address.model.product.Product;
 
 /**
  * A utility class containing a list of {@code Person} objects to be used in tests.
@@ -64,10 +65,23 @@ public class TypicalPersons {
         for (Person person : getTypicalPersons()) {
             ab.addPerson(person);
         }
+        for (Product product : getTypicalProducts()) {
+            ab.addProduct(product);
+        }
         return ab;
     }
 
     public static List<Person> getTypicalPersons() {
         return new ArrayList<>(Arrays.asList(ALICE, BENSON, CARL, DANIEL, ELLE, FIONA, GEORGE));
+    }
+
+    public static List<Product> getTypicalProducts() {
+        return new ArrayList<>(List.of(
+                new Product("Brownie"),
+                new Product("Chocolate Cake"),
+                new Product("Cookie"),
+                new Product("Muffin"),
+                new Product("Vanilla Cake")
+        ));
     }
 }

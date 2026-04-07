@@ -105,15 +105,13 @@ This guide assumes you are comfortable with:
 
 ![Ui](images/Ui.png)
 
-The table below follows the **top-to-bottom order** in the screenshot.
-
-| Label | Area | Purpose |
-|---|---|---|
-| **1** | **Menu Bar** | Access `Help` and `Exit`. |
-| **2** | **Command Box** | Where you type your commands. |
-| **3** | **Result Display** | Shows success messages or error feedback after each command. |
-| **4** | **Customer List Panel** | Displays all customers. Each card is colour-coded by **Priority Level** (Green/Yellow/Red) based on total product quantity and shows a priority badge (LOW, MEDIUM, HIGH) when applicable. |
-| **5** | **Status Bar** | Shows the data file save location. |
+| Area | Purpose |
+|---|---|
+| **Command Box** (top) | Where you type your commands. |
+| **Result Display** (below command box) | Shows success messages or error feedback after each command. |
+| **Customer List Panel** | Displays all customers. Cards are color-coded by **Priority Level** (Green/Yellow/Red) based on total product quantity when products are provided. |
+| **Priority Badge** | A small tag (LOW, MEDIUM, HIGH) shown next to the name when the customer has products. |
+| **Status Bar** (bottom) | Shows the data file save location. |
 
 ---
 
@@ -214,11 +212,11 @@ add name/NAME [products/PRODUCTS] [location/LOCATION] [deadline/DEADLINE] [conta
 
 | Parameter | Required? | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 |---|---|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `name/NAME` | Yes | 1–100 characters after trimming. Only letters (A–Z), spaces, `.`, `'`, and `-`. Must contain at least one letter. Names are unique ignoring case and extra spaces (e.g., `John Doe` and `john   doe` are treated as the same name).                                                                                                                                                                                     |
-| `products/PRODUCTS` | No | Comma-separated list of 1-5 items chosen from: Muffin, Chocolate Cake, Vanilla Cake, Brownie, Cookie. Items can optionally include a quantity using a colon (e.g., Muffin:3); if omitted, the quantity defaults to **1**. Matching is case-insensitive. Empty items are invalid.                                                                                                                                                                                           |
-| `location/LOCATION` | No | Must be non-empty after trimming. Maximum length 200 characters.                                                                                                                                                                                                                                                                                                                                                                                                                 |
-| `deadline/DEADLINE` | No | Accepted formats: `yyyy-MM-dd HH:mm`, `yyyy-MM-dd`, `dd/MM/yyyy`. Entries without a time default to **23:59**.                                                                                                                                                                                                                                                                                                                                                                   |
-| `contact/CONTACT` | No | One or more phone numbers and/or emails, separated by semicolons. Phone: either an 8-digit local number or `+<country code><number>` (2–3 digit country code + 1–12 digit number). Spaces in phone numbers are ignored. Email: up to 100 characters, letters/digits/dots/hyphens, with exactly one `@` and an alphanumeric at the start of the domain. Empty entries (e.g. trailing or double `;`) are invalid. |
+| `name/NAME` | Yes | 1-100 characters after trimming and space normalisation. Only ASCII letters (A-Z), spaces, `.`, `'`, and `-`. Must contain at least one letter. Names are unique case-insensitively and with repeated spaces collapsed.                                                                                                                                                                                                                                                          |
+| `products/PRODUCTS` | No | Comma-separated list of product names from the product catalog. There is no fixed limit on the number of product names, but quantities must not exceed 10,000 per product or 100,000 in total. Items can optionally include a quantity using a colon (e.g., Muffin:3); if omitted, quantity defaults to 1. Matching is case-insensitive and spaces are normalised. Empty items are invalid. Duplicate product names are allowed and their quantities are summed. Use `product add` to create products before referencing them. |
+| `location/LOCATION` | No | Non-blank after trimming. Maximum length 200 characters.                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `deadline/DEADLINE` | No | Accepted formats: `yyyy-MM-dd HH:mm`, `yyyy-MM-dd`, `dd/MM/yyyy` (24-hour time). Entries without a time default to **23:59**.                                                                                                                                                                                                                                                                                                                                                    |
+| `contact/CONTACT` | No | Semicolon-separated entries. Each entry must be either an 8-digit local phone number or an international phone in `+<2-3 digit country code><1-12 digit number>` format; spaces in phone numbers are ignored. Emails are up to 100 characters, must start with an alphanumeric character, contain only letters, digits, dots, and hyphens, and contain exactly one `@` with an alphanumeric at the start of the domain. Entries are stored with phone spaces removed and emails lowercased, then sorted. Empty entries (e.g. trailing or double `;`) are invalid. |
 
 > **Important:** ClientEase automatically tags customers with a priority colour based on the **total quantity** of products.
 > * **Green (Low):** 1–5 total items
@@ -232,14 +230,15 @@ add name/NAME [products/PRODUCTS] [location/LOCATION] [deadline/DEADLINE] [conta
 - Each prefix can appear at most once.
 - Unrecognised `<word>/` prefixes are rejected.
 - Optional fields can be omitted.
-- If a prefix is provided with no value (e.g. `products/`), the field is treated as empty.
-- Non-ASCII characters (e.g. Chinese) are rejected in `name/`, `products/`, and `contact/`. `location/` currently accepts
-  any characters as long as it is non-empty and within the length limit.
+- For optional fields, if a prefix is provided with no value (e.g. `products/`), the field is treated as empty.
+- Non-ASCII characters (e.g. Chinese) are rejected in `name/` and `contact/`. `products/` values must match product
+  names already in the product catalog (case-insensitive, spaces normalised). Product names cannot contain `,` or `:`.
+  `location/` accepts any characters as long as it is non-blank and within the length limit.
 
 > **Warning:** If you try to add a customer with a name that already exists (case-insensitive, extra spaces ignored),
 > ClientEase will reject the entry and display an error. Check the existing list with `list` before adding.
 
-**Products are listed as a numbered list under each customer card.**
+**Products are shown as a bulleted list with quantities (e.g., `- Muffin (x2)`). If no products are provided, the card shows `Products: None`.**
 
 **Examples:**
 
@@ -268,6 +267,33 @@ Shows a list of all customers in ClientEase.
 
 ---
 
+### Managing Products : `product`
+
+Manages the product catalog used by `add` and `edit`.
+
+**Formats:**
+```
+product add product/NAME   (or p/NAME)
+product delete product/NAME   (or p/NAME)
+product list
+```
+
+**Notes:**
+- Product names are case-insensitive with spaces normalised.
+- Product names must be non-blank and cannot contain `,` or `:`.
+- You cannot delete a product if any customer is currently using it.
+- `product` commands, subcommands, and the `product/` or `p/` prefix are case-insensitive.
+- `product list` shows products in alphabetical order.
+- If the catalog is empty, `add` and `edit` will reject any `products/` input and show "(no products in catalog)" in the
+  allowed list.
+
+**Examples:**
+- `product add product/Muffin`
+- `product delete p/Muffin`
+- `product list`
+
+---
+
 ### Editing a Customer : `edit`
 
 Edits an existing customer in ClientEase.
@@ -282,8 +308,7 @@ Short prefixes are supported: `n/` for `name/`, `p/` for `products/`, `l/` for `
 - Edits the customer at the specified `INDEX`. The index refers to the index number shown in the displayed customer list. The index **must be a positive integer** 1, 2, 3, …
 - At least one of the optional fields must be provided.
 - Existing values will be updated to the input values.
-- Products must be chosen from the allowed list: Muffin, Chocolate Cake, Vanilla Cake, Brownie, Cookie.
-- Field constraints are the same as for `add`.
+- Products follow the same constraints as `add`.
 
 **Examples:**
 
@@ -308,29 +333,21 @@ Finds persons whose names contain any of the given keywords.
 
 **Format:**
 ```
-find KEYWORD [MORE_KEYWORDS]
+find [name/NAME] [contact/CONTACT] [location/LOCATION] [products/PRODUCTS]
 ```
 
+- `NAME`, `CONTACT`, `LOCATION` and `PRODUCTS` are words separated by space.
 - The search is case-insensitive. e.g. `hans` will match `Hans`.
-- The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`.
-- The name, contact and location of each user will be searched.
-- For name and contact, only full words will be matched. e.g. `Han` will not match `Hans`.
-- For location, words containing the keyword will be matched. e.g. `gate` will match `Newgate`.
-- Persons matching at least one keyword will be returned (i.e. `OR` search). e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`.
+- The name, contact, location, and product list of each users will be searched.
+- For name and products, only full words will be matched. e.g. `Han` will not match `Hans`.
+- For location and contact, any substring will be matched. e.g. `123` will match `1234@mail.com`.
+- Searching multiple personal details (name, contact, or location) or multiple products will match any of those items; however, searching across both categories will only show results that match at least one from each.
 
 **Examples:**
 
-**Example 1: Find by name**
-```
-find John
-```
-Effect: Returns customers whose name contains `John` as a full word (e.g. `John Doe`).
-
-**Example 2: Find by multiple keywords**
-```
-find alex david
-```
-Effect: Returns customers matching either keyword.
+- `find name/John` returns `john` and `John Doe`
+- `find name/alex name/david` returns `Alex Yeoh`, `David Li`
+- `find name/alex name/david p/cake` returns `David Li`, where `Alex Yeoh` has `Muffin` and `David Li` has `Chocolate Cake`
 
 ![result for 'find alex david'](images/findAlexDavidResult.png)
 
@@ -482,6 +499,6 @@ name, consider differentiating them, e.g. `John Doe (Clementi)` and `John Doe (T
 | **Index** | The number shown beside each customer in the displayed list. It starts from 1. |
 | **Deadline** | A date (and optional time) representing when an order is due |
 | **Contact** | Consolidated contact details (phone and/or email) for a customer, separated by semicolons |
-| **Product** | An item associated with a customer's order, listed under Products |
+| **Product** | An item from the product catalog associated with a customer's order, listed under Products |
 | **Home folder** | The folder where `clientease.jar` and the `data/` directory are stored |
 | **JSON file** | The data file (`ClientEase.json`) where ClientEase stores all customer records |

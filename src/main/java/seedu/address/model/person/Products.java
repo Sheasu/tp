@@ -5,31 +5,28 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
+import seedu.address.commons.util.StringUtil;
 /**
  * Represents a Customer's products list with quantities.
  * Guarantees: immutable; is valid as declared in {@link #isValidProducts(String)}.
  */
 public class Products {
-    public static final List<String> ALLOWED_PRODUCTS = List.of(
-            "Muffin",
-            "Chocolate Cake",
-            "Vanilla Cake",
-            "Brownie",
-            "Cookie"
-    );
-    public static final int MAX_ITEM_TYPES = 5;
-    public static final String MESSAGE_CONSTRAINTS = "Products must be a comma-separated list with up to "
-            + MAX_ITEM_TYPES + " types, each optionally with a quantity (e.g. Muffin:3), chosen from: "
-            + String.join(", ", ALLOWED_PRODUCTS) + ".";
+    public static final int MAX_QTY_PER_PRODUCT = 10000;
+    public static final int MAX_TOTAL_QTY = 100000;
+    public static final int MAX_LENGTH = 80;
+    public static final String MESSAGE_CONSTRAINTS = "Products must be a comma-separated list of product names, "
+            + "each optionally with a positive quantity (e.g. Muffin:3).\n"
+            + "Quantities must not exceed " + MAX_QTY_PER_PRODUCT + " per product or " + MAX_TOTAL_QTY + " in total.";
+    public static final String MESSAGE_PRODUCT_NOT_FOUND = "Product \"%1$s\" does not exist!";
+    public static final String MESSAGE_PRODUCTS_CHOSEN_FROM = "Products must be chosen from:";
+    public static final String MESSAGE_NO_PRODUCTS_AVAILABLE = "(no products in catalog)";
 
-    private static final Map<String, String> CANONICAL_BY_LOWERCASE = buildCanonicalLookup();
     private static final Products EMPTY = new Products(Collections.emptyMap());
     private static final java.util.logging.Logger logger =
             seedu.address.commons.core.LogsCenter.getLogger(Products.class);
@@ -57,8 +54,7 @@ public class Products {
 
     /**
      * Returns true if the given string is a valid products input.
-     * Allows duplicate entries in the string as long as the number of UNIQUE
-     * types does not exceed MAX_ITEM_TYPES.
+     * Allows duplicate entries, which are merged by name (case-insensitive).
      */
     public static boolean isValidProducts(String test) {
         requireNonNull(test);
@@ -67,22 +63,31 @@ public class Products {
         }
 
         String[] parts = test.split(",");
-        java.util.Set<String> uniqueTypes = new java.util.HashSet<>();
+        Map<String, Long> perProductTotals = new LinkedHashMap<>();
+        long overallTotal = 0;
 
         for (String part : parts) {
-            String[] pair = part.trim().split(":", 2);
-            String itemName = pair[0].trim();
-            String canonicalName = toCanonical(itemName);
+            String trimmedPart = part.trim();
+            if (trimmedPart.isEmpty()) {
+                return false;
+            }
 
-            // Fail if the product name isn't in our ALLOWED_PRODUCTS list
-            if (canonicalName == null) {
+            String[] pair = trimmedPart.split(":", 2);
+            String itemName = normalizeSpaces(pair[0]);
+            if (itemName.isBlank()) {
                 return false;
             }
 
             // Validate the quantity if a colon is present
+            int qty = 1;
             if (pair.length > 1) {
                 try {
-                    if (Integer.parseInt(pair[1].trim()) <= 0) {
+                    String qtyText = pair[1].trim();
+                    if (qtyText.isEmpty()) {
+                        return false;
+                    }
+                    qty = Integer.parseInt(qtyText);
+                    if (qty <= 0) {
                         return false;
                     }
                 } catch (NumberFormatException e) {
@@ -90,12 +95,19 @@ public class Products {
                 }
             }
 
-            // Add the canonical name to the set to track unique types
-            uniqueTypes.add(canonicalName);
+            String key = itemName.toLowerCase(Locale.ROOT);
+            long updated = perProductTotals.getOrDefault(key, 0L) + qty;
+            if (updated > MAX_QTY_PER_PRODUCT) {
+                return false;
+            }
+            perProductTotals.put(key, updated);
+            overallTotal += qty;
+            if (overallTotal > MAX_TOTAL_QTY) {
+                return false;
+            }
         }
 
-        // Finally, check if the number of unique types is within the limit
-        return uniqueTypes.size() <= MAX_ITEM_TYPES;
+        return true;
     }
 
     /**
@@ -134,34 +146,58 @@ public class Products {
         if (!(other instanceof Products)) {
             return false;
         }
-        return itemMap.equals(((Products) other).itemMap);
+        Products otherProducts = (Products) other;
+        return toCanonicalMap().equals(otherProducts.toCanonicalMap());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(itemMap);
+        return Objects.hash(toCanonicalMap());
+    }
+
+    private Map<String, Integer> toCanonicalMap() {
+        Map<String, Integer> canonical = new LinkedHashMap<>();
+        itemMap.forEach((name, qty) -> canonical.put(name.toLowerCase(Locale.ROOT), qty));
+        return canonical;
     }
 
     private static Map<String, Integer> parseItemsWithQuantity(String products) {
         Map<String, Integer> map = new LinkedHashMap<>();
+        Map<String, String> displayNames = new LinkedHashMap<>();
         for (String part : products.split(",")) {
             String[] pair = part.trim().split(":", 2);
-            String name = toCanonical(pair[0].trim());
+            String name = normalizeSpaces(pair[0]);
+            String key = name.toLowerCase(Locale.ROOT);
+            String displayName = displayNames.computeIfAbsent(key, ignored -> name);
             int qty = (pair.length > 1) ? Integer.parseInt(pair[1].trim()) : 1;
-            map.merge(name, qty, Integer::sum);
+            map.merge(displayName, qty, Products::safeAdd);
         }
         return Collections.unmodifiableMap(map);
     }
 
-    private static String toCanonical(String item) {
-        return CANONICAL_BY_LOWERCASE.get(item.trim().toLowerCase(Locale.ROOT));
+    private static int safeAdd(int a, int b) {
+        long sum = (long) a + b;
+        if (sum > MAX_QTY_PER_PRODUCT) {
+            throw new IllegalArgumentException(MESSAGE_CONSTRAINTS);
+        }
+        return (int) sum;
     }
 
-    private static Map<String, String> buildCanonicalLookup() {
-        Map<String, String> lookup = new HashMap<>();
-        for (String product : ALLOWED_PRODUCTS) {
-            lookup.put(product.toLowerCase(Locale.ROOT), product);
-        }
-        return Collections.unmodifiableMap(lookup);
+    private static String normalizeSpaces(String input) {
+        return input.trim().replaceAll("\\s+", " ");
+    }
+
+    /**
+     * Builds an error message for an unknown product with a wrapped allowed-products list.
+     */
+    public static String buildUnknownProductMessage(String missingProduct, List<String> allowedProducts) {
+        List<String> sortedProducts = new ArrayList<>(allowedProducts);
+        sortedProducts.sort(String.CASE_INSENSITIVE_ORDER);
+        String formattedList = sortedProducts.isEmpty()
+                ? MESSAGE_NO_PRODUCTS_AVAILABLE
+                : StringUtil.formatListByLines(sortedProducts, 5, " ");
+        return String.format(MESSAGE_PRODUCT_NOT_FOUND, missingProduct)
+                + "\n" + MESSAGE_PRODUCTS_CHOSEN_FROM
+                + "\n" + formattedList;
     }
 }

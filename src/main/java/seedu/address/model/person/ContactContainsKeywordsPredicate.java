@@ -3,7 +3,6 @@ package seedu.address.model.person;
 import java.util.List;
 import java.util.function.Predicate;
 
-import seedu.address.commons.util.StringUtil;
 import seedu.address.commons.util.ToStringBuilder;
 
 /**
@@ -21,7 +20,7 @@ public class ContactContainsKeywordsPredicate implements Predicate<Person> {
         return keywords.stream()
                 .anyMatch(keyword -> person.getContact().getEntries().stream()
                         .anyMatch(contact ->
-                                StringUtil.containsWordIgnoreCase(keyword, contact)));
+                                contact.toLowerCase().contains(keyword.toLowerCase())));
     }
 
     @Override
