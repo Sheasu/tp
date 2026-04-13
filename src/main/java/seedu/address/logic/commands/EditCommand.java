@@ -91,7 +91,11 @@ public class EditCommand extends Command {
 
         model.setPerson(personToEdit, editedPerson); // updates customer record
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS); // refreshes list view
-        return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson)));
+        String feedback = String.format(MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson));
+        if (editedPerson.getDeadline().isPast()) {
+            feedback += "\n" + Messages.MESSAGE_PAST_DEADLINE;
+        }
+        return new CommandResult(feedback);
     }
 
     private void validateProductsExist(Model model, Products products) throws CommandException {

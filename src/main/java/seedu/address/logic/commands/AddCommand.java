@@ -71,7 +71,11 @@ public class AddCommand extends Command {
 
         logger.info("Adding customer: " + toAdd.getName());
         model.addPerson(toAdd); // saves new customer in model
-        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toAdd))); // shows success message
+        String feedback = String.format(MESSAGE_SUCCESS, Messages.format(toAdd));
+        if (toAdd.getDeadline().isPast()) {
+            feedback += "\n" + Messages.MESSAGE_PAST_DEADLINE;
+        }
+        return new CommandResult(feedback); // shows success message
     }
 
     private void validateProductsExist(Model model) throws CommandException {

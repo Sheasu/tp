@@ -18,11 +18,11 @@ public class Deadline implements Comparable<Deadline> {
     public static final String MESSAGE_CONSTRAINTS = "Error: Invalid date format.";
 
     private static final DateTimeFormatter INPUT_DATE_TIME_FORMATTER =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+            DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm").withResolverStyle(java.time.format.ResolverStyle.STRICT);
     private static final DateTimeFormatter INPUT_DATE_FORMATTER =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(java.time.format.ResolverStyle.STRICT);
     private static final DateTimeFormatter INPUT_SLASH_DATE_FORMATTER =
-            DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            DateTimeFormatter.ofPattern("dd/MM/uuuu").withResolverStyle(java.time.format.ResolverStyle.STRICT);
     private static final DateTimeFormatter OUTPUT_FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
@@ -61,6 +61,13 @@ public class Deadline implements Comparable<Deadline> {
      */
     public boolean isEmpty() {
         return isEmpty;
+    }
+
+    /**
+     * Returns true if the deadline is in the past.
+     */
+    public boolean isPast() {
+        return !isEmpty && value.isBefore(LocalDateTime.now());
     }
 
     /**

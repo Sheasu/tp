@@ -19,6 +19,7 @@ public class Messages {
     public static final String MESSAGE_CUSTOMERS_FOUND_OVERVIEW = "%1$d customers found!";
     public static final String MESSAGE_DUPLICATE_FIELDS =
                 "Multiple values specified for the following single-valued field(s): ";
+    public static final String MESSAGE_PAST_DEADLINE = "NOTE: Date is in the past! Please edit if this was a mistake.";
 
     /**
      * Returns an error message indicating the duplicate prefixes.

@@ -29,6 +29,8 @@ public class DeadlineTest {
         assertFalse(Deadline.isValidDeadline("")); // empty string
         assertFalse(Deadline.isValidDeadline("2026-13-40")); // invalid date
         assertFalse(Deadline.isValidDeadline("2026/03/10")); // invalid format
+        assertFalse(Deadline.isValidDeadline("2027-02-29")); // non-existent date (Feb 2027)
+        assertFalse(Deadline.isValidDeadline("2027-04-31 09:00")); // non-existent date (Apr 31)
 
         // valid deadlines
         assertTrue(Deadline.isValidDeadline("2026-03-10"));
