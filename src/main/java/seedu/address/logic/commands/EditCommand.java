@@ -92,7 +92,7 @@ public class EditCommand extends Command {
         model.setPerson(personToEdit, editedPerson); // updates customer record
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS); // refreshes list view
         String feedback = String.format(MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson));
-        if (editedPerson.getDeadline().isPast()) {
+        if (editPersonDescriptor.getDeadline().isPresent() && editedPerson.getDeadline().isPast()) {
             feedback += "\n" + Messages.MESSAGE_PAST_DEADLINE;
         }
         return new CommandResult(feedback);

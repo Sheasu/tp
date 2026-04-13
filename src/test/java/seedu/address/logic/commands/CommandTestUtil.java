@@ -32,8 +32,8 @@ public class CommandTestUtil {
     public static final String VALID_PRODUCTS_BOB = "Vanilla Cake";
     public static final String VALID_LOCATION_AMY = "Block 312, Amy Street 1";
     public static final String VALID_LOCATION_BOB = "Block 123, Bobby Street 3";
-    public static final String VALID_DEADLINE_AMY = "2026-03-10";
-    public static final String VALID_DEADLINE_BOB = "2026-03-11 12:00";
+    public static final String VALID_DEADLINE_AMY = "2030-03-10";
+    public static final String VALID_DEADLINE_BOB = "2030-03-11 12:00";
     public static final String VALID_CONTACT_AMY = "11111111";
     public static final String VALID_CONTACT_BOB = "bob@example.com";
 
