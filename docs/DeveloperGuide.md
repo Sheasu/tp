@@ -458,6 +458,24 @@ testers are expected to do more *exploratory* testing.
     2. Run `exit` command.<br>
        Expected: A message is shown: `Goodbye! Exiting ClientEase. You have X customer(s) saved.`. `X` is the number of customers.
 
+### Adding a customer
+
+1. Adding a customer while all customers are being shown
+
+    1. Prerequisites: List all customers using the `list` command. Multiple customers in the list.
+
+    2. Test case: `add name/John Doe contact/98765432;johnd@example.com products/Muffin:3 location/Clementi Ave 2 deadline/2026-12-31`<br>
+       Expected: A new customer is added with the given details. Customer is given a Low priority badge, with a green color. Customer name is shown in the status message.
+
+    3. Test case: `add name/John Doe`<br>
+       Expected: No customer is added, as the customer already exists. Error details shown in the status message.
+
+    4. Test case: `add n/John Smith`<br>
+       Expected: A customer is added with name `John Smith`, with no other details. No priority badge is shown, and the color is gray.
+
+    5. Test case: `add name/Tommy contact/987`<br>
+       Expected: No customer is added. Error details shown in the status message.
+
 ### Deleting a customer
 
 1. Deleting a customer while all customers are being shown
