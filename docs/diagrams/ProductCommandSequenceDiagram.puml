@@ -1,0 +1,64 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":ProductCommandParser" as ProductCommandParser LOGIC_COLOR
+participant "a:ProductAddCommand" as ProductAddCommand LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "m:Model" as Model MODEL_COLOR
+end box
+
+[-> LogicManager : execute("product add p/Muffin")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("product add p/Muffin")
+activate AddressBookParser
+
+AddressBookParser -> ProductCommandParser : parse("add p/Muffin")
+activate ProductCommandParser
+
+create ProductAddCommand
+ProductCommandParser -> ProductAddCommand
+activate ProductAddCommand
+
+ProductAddCommand --> ProductCommandParser
+deactivate ProductCommandParser
+
+ProductCommandParser --> AddressBookParser : a
+deactivate ProductCommandParser
+
+AddressBookParser --> LogicManager : a
+deactivate AddressBookParser
+
+LogicManager -> ProductAddCommand : execute(m)
+activate ProductAddCommand
+
+ProductAddCommand -> Model : hasProduct(product)
+activate Model
+Model --> ProductAddCommand : false
+deactivate Model
+
+ProductAddCommand -> Model : addProduct(product)
+activate Model
+Model --> ProductAddCommand
+deactivate Model
+
+create CommandResult
+ProductAddCommand -> CommandResult
+activate CommandResult
+
+CommandResult --> ProductAddCommand
+deactivate CommandResult
+
+ProductAddCommand --> LogicManager : r
+deactivate ProductAddCommand
+
+[<--LogicManager
+deactivate LogicManager
+@enduml

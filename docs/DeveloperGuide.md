@@ -163,6 +163,76 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
+### Product catalogue management
+
+ClientEase manages products through the top-level `product` command, which is split into three subcommands: `add`, `delete`, and `list`.
+
+#### Overall command flow
+
+When the user enters a command such as `product add product/Muffin`:
+
+1. `AddressBookParser` recognises `product` as the command word.
+2. The remaining input is passed to `ProductCommandParser`.
+3. The parser extracts the subcommand (`add`, `delete`, or `list`).
+4. The corresponding command object is created and executed.
+
+The following sequence diagram illustrates how a `product add` command is processed:
+
+![Product Command Sequence](images/ProductCommandSequenceDiagram.png)
+
+#### Parsing behaviour
+
+`ProductCommandParser` supports both `product/NAME` and `p/NAME` prefixes.
+
+- All prefixes are normalized internally to ensure consistency.
+- Invalid inputs are rejected if they contain:
+    - Missing product names
+    - Duplicate prefixes
+    - Unexpected preamble text
+
+If parsing fails, a `ParseException` is thrown with the appropriate usage message.
+
+#### Adding a product (`product add`)
+
+Handled by `ProductAddCommand`:
+
+1. Checks if the product already exists using `model.hasProduct(...)`.
+2. If it exists → throws a duplicate-product error.
+3. Otherwise → adds the product using `model.addProduct(...)`.
+4. Returns a success message.
+
+This ensures that the product catalogue contains no duplicate entries.
+
+#### Deleting a product (`product delete`)
+
+Handled by `ProductDeleteCommand`:
+
+1. Checks if the product exists in the catalogue.
+    - If not → throws a "product not found" error.
+2. Checks if the product is currently used by any customer:
+    - Iterates through all customers in the model
+    - Compares against each customer's product list
+3. If the product is in use → throws an error and prevents deletion.
+4. Otherwise → deletes the product using `model.deleteProduct(...)`.
+
+This additional validation ensures that products cannot be removed while still referenced by customers.
+
+#### Listing products (`product list`)
+
+Handled by `ProductListCommand`:
+
+1. Retrieves all products using `model.getProductList()`.
+2. Sorts them case-insensitively.
+3. Formats them into a readable line-by-line list.
+
+If no products exist, a dedicated empty-state message is shown.
+
+#### Design considerations
+
+- The product feature follows the existing command pattern used in ClientEase:
+    - Parsing → Command creation → Model update → UI feedback
+- The product-in-use check in `product delete` is a key safeguard that maintains consistency between the product catalogue and customer data.
+
 ### \[Proposed\] Undo/redo feature
 
 #### Proposed Implementation
@@ -181,7 +251,7 @@ Step 1. The user launches the application for the first time. The `VersionedAddr
 
 ![UndoRedoState0](images/UndoRedoState0.png)
 
-Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
+Step 2. The user executes `delete 5` command to delete the 5th customer in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
 
 ![UndoRedoState1](images/UndoRedoState1.png)
 
