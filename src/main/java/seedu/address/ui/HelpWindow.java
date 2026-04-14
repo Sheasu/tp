@@ -62,7 +62,7 @@ public class HelpWindow extends UiPart<Stage> {
                     + "    List all products\n\n"
 
                     + ClearCommand.COMMAND_WORD + "\n"
-                    + "    Clear all customers\n\n"
+                    + "    Clear all data (customers and products)\n\n"
 
                     + HelpCommand.COMMAND_WORD + "\n"
                     + "    Show this help message\n\n"
