@@ -34,6 +34,16 @@ Refer to the guide [_Setting up and getting started_](SettingUp.md).
 :bulb: **Tip:** The `.puml` files used to create diagrams are in this document `docs/diagrams` folder. Refer to the [_PlantUML Tutorial_ at se-edu/guides](https://se-education.org/guides/tutorials/plantUml.html) to learn how to create and edit diagrams.
 </div>
 
+<div markdown="span" class="alert alert-info">
+:information_source: **Note on Naming Convention: "Person" vs "Customer"**
+
+Throughout this guide and the codebase, the term **`Person`** is used at the code level (e.g., `Person`, `UniquePersonList`, `PersonListPanel`, `PersonCard`). This is inherited from the original AddressBook Level 3 (AB3) project that ClientEase is based on.
+
+At the application and documentation level, however, **`Person` and "customer" refer to the same entity** — an individual whose contact and order details are stored in ClientEase. The term "customer" is preferred in user-facing contexts and prose descriptions to better reflect the target use case of the application.
+
+Developers should be aware of this distinction when navigating between the codebase and this guide.
+</div>
+
 ### Architecture
 
 <img src="images/ArchitectureDiagram.png" width="280" />
