@@ -163,11 +163,11 @@ The screenshot above shows the main ClientEase window. The table below describes
 
 | Area | Purpose |
 |---|---|
-| ① **Command Box** (top) | Where you type your commands. |
-| ② **Result Display** (below command box) | Shows success messages or error feedback after each command. |
-| ③ **Customer List Panel** | Displays all customers. Cards are colour-coded by **Priority Level** (Green/Yellow/Red) based on total product quantity when products are provided. |
-| ④ **Priority Badge** | A small tag (LOW, MEDIUM, HIGH) shown next to the name when the customer has products. |
-| ⑤ **Status Bar** (bottom) | Shows the data file save location. |
+| **Command Box** (top) | Where you type your commands. |
+| **Result Display** (below command box) | Shows success messages or error feedback after each command. |
+| **Customer List Panel** | Displays all customers. Cards are colour-coded by **Priority Level** (Green/Yellow/Red) based on total product quantity when products are provided. |
+| **Priority Badge** | A small tag (LOW, MEDIUM, HIGH) shown next to the name when the customer has products. |
+| **Status Bar** (bottom) | Shows the data file save location. |
 
 [↑ Back to Table of Contents](#table-of-contents)
 
@@ -372,18 +372,11 @@ Opens a help window that provides a quick overview of available commands and a l
 
 **Format:** `help`
 
-### Behaviour
+> ℹ️ **Notes:**
+> - The help window does **not block** the main application — you can continue using ClientEase while it is open.
+> - If the help window is already open, running `help` again will focus on the existing window.
 
-- The help window opens in the top-right corner of the screen, allowing you to continue viewing and using the main application.
-- The help window is non-modal, so it does not block interaction with the main application.
-- If the help window is already open, running help again will bring the window to the front.
-
-### Notes
-
-- The help window provides a quick reference for commonly used commands.
-- You can copy the User Guide link using the "Copy URL" button in the help window.
-
-> **Tip:** Use the help window as a quick reference when you forget command formats, instead of searching through the full guide.
+> 💡 **Tip:** Use the help window as a quick reference when you forget command formats, instead of searching through the full guide.
 
 [↑ Back to Table of Contents](#table-of-contents)
 
@@ -631,11 +624,6 @@ delete John Doe
 ```
 Effect: Deletes the customer named `John Doe` (case-insensitive, extra spaces ignored).
 
-**Notes:**
-- The delete command operates on the currently displayed list.
-- If the target customer is not visible (e.g. due to filtering), the command will not find and delete the customer.
-
-[↑ Back to Table of Contents](#table-of-contents)
 
 ---
 
@@ -645,7 +633,7 @@ Clears all entries from ClientEase.
 
 **Format:** `clear`
 
-> ⚠️ **Warning:** This action is irreversible and will permanently delete all customer records. Consider backing up
+> **Warning:** This action is irreversible and will permanently delete all customer records. Consider backing up
 > `data/ClientEase.json` (see [Saving the Data](#saving-the-data)) before running this command.
 
 [↑ Back to Table of Contents](#table-of-contents)
@@ -686,7 +674,7 @@ Advanced users may edit the data file directly using any text editor.
 > ⚠️ **Caution:** If your changes to the data file make its format invalid, ClientEase will discard all data and start with
 > an empty data file at the next run. It is recommended to back up the file before editing it.
 >
-> Certain edits can also cause ClientEase to behave in unexpected ways (e.g., if a value entered is outside the
+> Certain edits can also cause **ClientEase** to behave in unexpected ways (e.g., if a value entered is outside the
 > acceptable range). Edit the data file only if you are confident that you can update it correctly.
 
 [↑ Back to Table of Contents](#table-of-contents)
@@ -703,7 +691,7 @@ A: Install the app in the other computer and overwrite the empty data file it cr
 **Q: Can I have two customers with the same name?**
 
 A: No. ClientEase treats names as unique identifiers (case-insensitive, extra spaces ignored). If two customers share a
-name, consider differentiating them, e.g. `John Doe (Clementi)` and `John Doe (Tampines)`.
+name, consider differentiating them, e.g. `Dr John Doe` and `John Doe Jr`.
 
 [↑ Back to Table of Contents](#table-of-contents)
 
@@ -711,9 +699,11 @@ name, consider differentiating them, e.g. `John Doe (Clementi)` and `John Doe (T
 
 ## Known Issues
 
-1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. Workaround: delete the `preferences.json` file created by the application before running the application again.
+1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. **Workaround**: delete the `preferences.json` file created by the application before running the application again.
 
-2. **If you minimise the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimised, and no new Help Window will appear. Workaround: manually restore the minimised Help Window.
+2. **If you minimise the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimised, and no new Help Window will appear. **Workaround**: manually restore the minimised Help Window.
+
+3. **In certain window dimensions**, the layout priority settings may cause names to truncate despite available horizontal space. **Workaround**: Increase the application window width until the text fully expands.
 
 [↑ Back to Table of Contents](#table-of-contents)
 
@@ -746,19 +736,20 @@ name, consider differentiating them, e.g. `John Doe (Clementi)` and `John Doe (T
 
 ## Glossary
 
-| Term | Definition |
-|---|---|
-| **CLI** | Command Line Interface - a text-based way of interacting with software by typing commands |
-| **GUI** | Graphical User Interface - the visual window of the app |
-| **Customer** | A record representing an individual who has placed or may place an order with your business |
-| **Command** | A text instruction you type into the command box to perform an action |
-| **Parameter** | A piece of information supplied alongside a command, e.g. `name/John Doe` |
-| **Prefix** | The short label before a parameter value, e.g. `name/`, `products/`, `contact/` |
-| **Index** | The number shown beside each customer in the displayed list. It starts from 1. |
-| **Deadline** | A date (and optional time) representing when an order is due |
-| **Contact** | Consolidated contact details (phone and/or email) for a customer, separated by semicolons |
-| **Product** | An item from the product catalogue associated with a customer's order, listed under Products |
-| **Home folder** | The folder where `clientease.jar` and the `data/` directory are stored |
-| **JSON file** | The data file (`ClientEase.json`) where ClientEase stores all customer records |
+| Term            | Definition                                                                                                                                                             |
+|-----------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **CLI**         | Command Line Interface - a text-based way of interacting with software by typing commands                                                                              |
+| **GUI**         | Graphical User Interface - the visual window of the app                                                                                                                |
+| **Customer**    | A record representing an individual who has placed or may place an order with your business                                                                            |
+| **Command**     | A text instruction you type into the command box to perform an action                                                                                                  |
+| **Parameter**   | A piece of information supplied alongside a command, e.g. `name/John Doe`                                                                                              |
+| **Prefix**      | The short label before a parameter value, e.g. `name/`, `products/`, `contact/`                                                                                        |
+| **Suffix**      | A letter or set of letters added to the end of a person's last name to indicate their family lineage, honorific title, or professional qualification |
+| **Index**       | The number shown beside each customer in the displayed list. It starts from 1.                                                                                         |
+| **Deadline**    | A date (and optional time) representing when an order is due                                                                                                           |
+| **Contact**     | Consolidated contact details (phone and/or email) for a customer, separated by semicolons                                                                              |
+| **Product**     | An item from the product catalogue associated with a customer's order, listed under Products                                                                           |
+| **Home folder** | The folder where `clientease.jar` and the `data/` directory are stored                                                                                                 |
+| **JSON file**   | The data file (`ClientEase.json`) where ClientEase stores all customer records                                                                                         |
 
 [↑ Back to Table of Contents](#table-of-contents)
