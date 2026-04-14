@@ -491,6 +491,39 @@ testers are expected to do more *exploratory* testing.
     4. Other incorrect delete commands to try: delete, delete x, ... (where x is larger than the list size)<br>
       Expected: Similar to previous.
 
+### Managing Products
+
+1. Adding a product to the catalogue
+
+    1. Test case: `product add product/Apple Pie`<br>
+      Expected: `Apple Pie` is added to the product catalogue. Status message confirms the addition.
+
+    2. Test case: `product add product/Apple Pie` (duplicate)<br>
+      Expected: No product is added. Error message indicating that the product already exists in the catalogue.
+
+    3. Test case: `product add product/` (blank name)<br>
+      Expected: No product is added. Error message is shown in the status message.
+
+    4. Test case: `product add product/Cake,Special` (name containing `,`)<br>
+      Expected: No product is added. Error message indicating that `,` and `:` are not allowed in product names.
+
+2. Listing products in the catalogue
+
+    1. Test case: `product list`<br>
+    Expected: All products in the catalogue are displayed in alphabetical order in the status message. If the catalogue is empty, a message indicating no products are available is shown.
+
+3. Deleting a product from the catalogue
+
+    1. Prerequisites: The product catalogue contains `Muffin`, and no customer currently has `Muffin` in their product list.
+
+    2. Test case: `product delete product/Muffin`<br>
+    Expected: `Muffin` is removed from the product catalogue. Status message confirms the deletion.
+
+    3. Test case: `product delete product/Muffin` when a customer is currently using `Muffin`<br>
+    Expected: No product is deleted. Error message indicating that the product is in use and cannot be removed.
+
+    4. Test case: `product delete product/NonExistent`<br>
+    Expected: No product is deleted. Error message indicating that the product does not exist in the catalogue.
 
 ### Saving data
 
