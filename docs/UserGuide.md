@@ -633,7 +633,7 @@ Clears all entries from ClientEase.
 
 **Format:** `clear`
 
-> **Warning:** This action is irreversible and will permanently delete all customer records. Consider backing up
+> **Warning:** This action is irreversible and will permanently delete all customer and product records. Consider backing up
 > `data/ClientEase.json` (see [Saving the Data](#saving-the-data)) before running this command.
 
 [↑ Back to Table of Contents](#table-of-contents)
