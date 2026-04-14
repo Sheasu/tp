@@ -140,14 +140,8 @@ The `Model` component,
 * allows filtering of customers based on user commands such as `find`.
 * provides methods to modify data, such as adding, deleting, and editing customers and products.
 * ensures data consistency by preventing invalid operations (e.g. deleting a non-existent customer).
-* stores a `UserPref` object that represents user preferences, exposed as a `ReadOnlyUserPref`.
+* stores a `UserPrefs` object that represents user preferences, exposed as a `ReadOnlyUserPrefs`.
 * does not depend on the `UI`, `Logic`, or `Storage` components, as it represents the core data and domain logic of the application.
-
-<div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
-
-<img src="images/BetterModelClassDiagram.png" width="450" />
-
-</div>
 
 
 ### Storage component
