@@ -72,7 +72,9 @@ This guide assumes you are comfortable with:
 | Basic data awareness | Understanding that your data is stored in a local file, and knowing to back it up |
 
 <div markdown="1" class="alert alert-info">
+
 :information_source: **Not sure if ClientEase is right for you?** If you manage more than a few hundred customers with complex team workflows, you may want a full-scale customer relationship management (CRM) system instead.
+
 </div>
 
 [↑ Back to Table of Contents](#table-of-contents)
@@ -221,7 +223,9 @@ exit
 Expected output: `Goodbye! Exiting ClientEase. You have <N> customer(s) saved.`
 
 <div markdown="1" class="alert alert-primary">
+
 :bulb: **Tip:** All your data is saved automatically after every command. You never need to press a "Save" button.
+
 </div>
 
 [↑ Back to Table of Contents](#table-of-contents)
@@ -233,7 +237,9 @@ Expected output: `Goodbye! Exiting ClientEase. You have <N> customer(s) saved.`
 ### Notes on Command Format
 
 <div markdown="1" class="alert alert-info">
+
 :information_source: **Read this before using any command.**
+
 </div>
 
 - Words in `UPPER_CASE` are **parameters you supply**. For example, in `add name/NAME`, replace `NAME` with the actual
@@ -270,7 +276,9 @@ To keep stored data consistent and reduce accidental duplicates, ClientEase norm
 - Example: use `find c/+6591234567` instead of `find c/+65 9123 4567`.
 
 <div markdown="1" class="alert alert-warning">
+
 :exclamation: **Important:** This applies only to spaces in phone numbers. Hyphens and parentheses are not accepted as valid phone-number input.
+
 </div>
 
 [↑ Back to Table of Contents](#table-of-contents)
@@ -322,7 +330,9 @@ This section defines all parameters used across commands.
 | **Shorthand** | `p/` |
 
 <div markdown="1" class="alert alert-info">
+
 :information_source: **Note:** Products must exist in the product catalogue before they can be referenced. Use [`product add`](#managing-products--product) to create them first. Product names cannot contain `,` or `:`.
+
 </div>
 
 ---
@@ -366,7 +376,9 @@ This section defines all parameters used across commands.
 | **Shorthand** | `c/` |
 
 <div markdown="1" class="alert alert-warning">
+    
 :exclamation: **Important:** Empty entries (e.g. trailing or double `;`) are invalid.
+
 </div>
 
 [↑ Back to Table of Contents](#table-of-contents)
@@ -384,13 +396,17 @@ Opens a help window that provides a quick overview of available commands and a l
 **Format:** `help`
 
 <div markdown="1" class="alert alert-info">
+    
 :information_source: **Notes:**
 - The help window does **not block** the main application — you can continue using ClientEase while it is open.
 - If the help window is already open, running `help` again will focus on the existing window.
+- 
 </div>
 
 <div markdown="1" class="alert alert-primary">
+    
 :bulb: **Tip:** Use the help window as a quick reference when you forget command formats, instead of searching through the full guide.
+
 </div>
 
 [↑ Back to Table of Contents](#table-of-contents)
@@ -413,11 +429,13 @@ add name/NAME
 **Parameters:** See [Parameter Reference](#parameter-reference) — [`name/NAME`](#param-name), [`products/PRODUCTS`](#param-products), [`location/LOCATION`](#param-location), [`deadline/DEADLINE`](#param-deadline), [`contact/CONTACT`](#param-contact).
 
 <div markdown="1" class="alert alert-warning">
+    
 :exclamation: **Important:** ClientEase automatically tags customers with a priority colour based on the **total quantity** of products.
 * **🟢 Green (Low):** 1–5 total items
 * **🟡 Yellow (Medium):** 6–10 total items
 * **🔴 Red (High):** 11 or more total items
 * No priority tag is shown if the customer has no products.
+
 </div>
 
 ![Priority Badges](images/priority.png)
@@ -430,8 +448,10 @@ add name/NAME
 - Non-ASCII characters (e.g. Chinese) are rejected in `name/` and `contact/`.
 
 <div markdown="1" class="alert alert-warning">
+    
 ⚠️ **Warning:** If you try to add a customer with a name that already exists (case-insensitive, extra spaces ignored),
 ClientEase will reject the entry and display an error. Check the existing list with `list` before adding.
+
 </div>
 
 **Products are shown as a bulleted list with quantities (e.g., `- Muffin (x2)`). If no products are provided, the card shows `Products: None`.**
@@ -483,6 +503,7 @@ product list
 ```
 
 <div markdown="1" class="alert alert-info">
+    
 :information_source: **Notes:**
 - Product names are case-insensitive with spaces normalised.
 - Product names must be non-blank and cannot contain `,` or `:`.
@@ -490,6 +511,7 @@ product list
 - `product` commands, subcommands, and the `product/` or `p/` prefix are case-insensitive.
 - `product list` shows products in alphabetical order.
 - If the catalogue is empty, `add` and `edit` will reject any `products/` input and show "(no products in catalog)" in the allowed list.
+
 </div>
 
 **Examples:**
@@ -587,7 +609,9 @@ Short prefixes are supported: `n/` for `name/`, `c/` for `contact/`, `l/` for `l
 - Searching multiple personal details (name, contact, or location) or multiple products will match any of those items; however, searching across both categories will only show results that match at least one from each.
 
 <div markdown="1" class="alert alert-primary">
+    
 :bulb: **Tip:** Phone numbers are matched against the stored normalised value with spaces removed. For example, if a number is stored as `+6591234567`, search with `find c/+6591234567`, not `find c/+65 9123 4567`.
+
 </div>
 
 **Examples:**
@@ -658,8 +682,10 @@ Clears all entries from ClientEase.
 **Format:** `clear`
 
 <div markdown="1" class="alert alert-warning">
+    
 :warning: **Warning:** This action is irreversible and will permanently delete all customer and product records. Consider backing up
 `data/ClientEase.json` (see [Saving the Data](#saving-the-data)) before running this command.
+
 </div>
 
 [↑ Back to Table of Contents](#table-of-contents)
@@ -698,11 +724,13 @@ Your data is stored at:
 Advanced users may edit the data file directly using any text editor.
 
 <div markdown="1" class="alert alert-warning">
+    
 :warning: **Caution:** If your changes to the data file make its format invalid, ClientEase will discard all data and start with
 an empty data file at the next run. It is recommended to back up the file before editing it.
 <br>
 Certain edits can also cause **ClientEase** to behave in unexpected ways (e.g., if a value entered is outside the
 acceptable range). Edit the data file only if you are confident that you can update it correctly.
+
 </div>
 
 [↑ Back to Table of Contents](#table-of-contents)
@@ -755,9 +783,11 @@ name, consider differentiating them, e.g. `Dr John Doe` and `John Doe Jr`.
 | **Product list** | `product list` | `product list` |
 
 <div markdown="1" class="alert alert-primary">
+    
 :bulb: **Tip:** Shorthand prefixes for `add`, `edit`, and `find`: `n/` for `name/`, `p/` for `products/` and `product/`, `l/` for `location/`,
 `d/` for `deadline/`, and `c/` for `contact/`. Example: `add n/John Doe p/Muffin` is equivalent to
 `add name/John Doe products/Muffin`.
+
 </div>
 
 [↑ Back to Table of Contents](#table-of-contents)
